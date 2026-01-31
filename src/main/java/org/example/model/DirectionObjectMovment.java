@@ -1,6 +1,6 @@
 package org.example.model;
 
-public enum Direction {
+public enum DirectionObjectMovment {
     UP,
     DOWN,
     LEFT,

@@ -1,6 +1,6 @@
 package org.example.model;
 
-public enum Owner {
+public enum OwnerObject {
     PLAYER,
     ENEMY,
     NOBODY
