@@ -23,6 +23,7 @@ public class Ship extends FieldObject{
             case RIGHT ->
                 point = new Point(oldPoint.getX() + speed, oldPoint.getY());
         }
+        System.out.println("Корабль передвинулся в точку: " + point);
         fireShipIsMoved();
     }
 
