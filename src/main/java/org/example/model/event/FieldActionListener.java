@@ -1,4 +1,11 @@
 package org.example.model.event;
 
-public interface FieldActionListener {
+import org.example.model.field.Field;
+import org.example.model.field.FieldObject;
+
+import java.util.EventListener;
+import java.util.List;
+
+public interface FieldActionListener extends EventListener {
+    void fieldObjectsCollide(FieldActionEvent event);
 }

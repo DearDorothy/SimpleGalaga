@@ -6,15 +6,13 @@ import org.example.model.field.Ship;
 
 import javax.swing.*;
 
-public class ShipWidget extends JPanel implements ShipActionListener {
+public class ShipWidget extends FieldObjectWidget implements ShipActionListener {
 
     @Override
     public void shipIsFire(ShipActionEvent event) {
-
     }
 
     @Override
     public void shipIsMoved(ShipActionEvent event) {
-
     }
 }
