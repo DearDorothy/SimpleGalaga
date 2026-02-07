@@ -52,6 +52,6 @@ public class ShipPanel extends JPanel implements ShipActionListener {
                 ship.getPoint().getX(),
                 ship.getPoint().getY(),
                 size, size, this
-                );
+        );
     }
 }

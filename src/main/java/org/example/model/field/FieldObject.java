@@ -19,7 +19,9 @@ public abstract class FieldObject {
         this.point = point;
     }
 
-    public Point getPoint() { return point; }
+    public Point getPoint() {
+        return point;
+    }
 
     abstract public void move(DirectionObjectMovment directionObjectMovment);
 }

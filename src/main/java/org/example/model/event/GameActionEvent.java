@@ -12,17 +12,29 @@ public class GameActionEvent extends EventObject {
     private EnemyCommander enemyCommander;
     private GameStatus status;
 
-    public void setPlayer(Player player) { this.player = player; }
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
 
-    public Player getPlayer() { return player; }
+    public Player getPlayer() {
+        return player;
+    }
 
-    public void setEnemyCommander(EnemyCommander enemyCommander) {  this.enemyCommander = enemyCommander; }
+    public void setEnemyCommander(EnemyCommander enemyCommander) {
+        this.enemyCommander = enemyCommander;
+    }
 
-    public EnemyCommander getEnemyCommander() { return enemyCommander; }
+    public EnemyCommander getEnemyCommander() {
+        return enemyCommander;
+    }
 
-    public void setStatus(GameStatus status) { this.status = status; }
+    public void setStatus(GameStatus status) {
+        this.status = status;
+    }
 
-    public GameStatus getStatus() { return status; }
+    public GameStatus getStatus() {
+        return status;
+    }
 
     public GameActionEvent(Object source) {
         super(source);

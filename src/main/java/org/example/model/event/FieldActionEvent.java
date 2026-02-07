@@ -9,9 +9,13 @@ public class FieldActionEvent extends EventObject {
 
     private List<FieldObject> listCollidedObjects;
 
-    public void setListCollidedObjects(List<FieldObject> listCollidedObjects) { this.listCollidedObjects = listCollidedObjects; }
+    public void setListCollidedObjects(List<FieldObject> listCollidedObjects) {
+        this.listCollidedObjects = listCollidedObjects;
+    }
 
-    public List<FieldObject> getListCollidedObjects() { return listCollidedObjects; }
+    public List<FieldObject> getListCollidedObjects() {
+        return listCollidedObjects;
+    }
 
     public FieldActionEvent(Object source) {
         super(source);

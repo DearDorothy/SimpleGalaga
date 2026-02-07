@@ -17,26 +17,26 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            Field field = new Field();
-
-            Point point = new Point(150, 500);
-            List<Ship> fleetShip = new ArrayList<>(Arrays.asList(new Ship(point, OwnerObject.PLAYER, 5)));
-
-            Player player = new Player(fleetShip);
-            PlayerController playerController = new PlayerController(player, field);
-
-            ShipPanel shipPanel = new ShipPanel(playerController, player.getActiveShip(), 35);
-
-            JFrame jFrame = new JFrame("SimpleGalaga");
-            jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            jFrame.getContentPane().setPreferredSize(new Dimension(field.getWidth(), field.getHeight()));
-            jFrame.pack();
-            jFrame.setLocation(600, 130);
-            jFrame.add(shipPanel);
-            jFrame.addKeyListener(playerController);
-            jFrame.setVisible(true);
-            jFrame.setFocusable(true);
-            jFrame.requestFocusInWindow();
+//            Field field = new Field();
+//
+//            Point point = new Point(150, 500);
+//            List<Ship> fleetShip = new ArrayList<>(Arrays.asList(new Ship(point, OwnerObject.PLAYER, 5)));
+//
+//            Player player = new Player(fleetShip);
+//            PlayerController playerController = new PlayerController(player, field);
+//
+//            ShipPanel shipPanel = new ShipPanel(playerController, player.getActiveShip(), 35);
+//
+//            JFrame jFrame = new JFrame("SimpleGalaga");
+//            jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//            jFrame.getContentPane().setPreferredSize(new Dimension(field.getWidth(), field.getHeight()));
+//            jFrame.pack();
+//            jFrame.setLocation(600, 130);
+//            jFrame.add(shipPanel);
+//            jFrame.addKeyListener(playerController);
+//            jFrame.setVisible(true);
+//            jFrame.setFocusable(true);
+//            jFrame.requestFocusInWindow();
         });
     }
 }

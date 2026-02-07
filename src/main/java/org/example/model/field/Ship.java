@@ -18,26 +18,26 @@ public class Ship extends FieldObject{
     public void move(DirectionObjectMovment directionObjectMovment) {
         Point oldPoint = point;
         switch(directionObjectMovment) {
-            case LEFT ->
-                point = new Point(oldPoint.getX() - speed, oldPoint.getY());
-            case RIGHT ->
-                point = new Point(oldPoint.getX() + speed, oldPoint.getY());
-            case UP ->
-                point = new Point(oldPoint.getX(), oldPoint.getY() - speed);
-            case DOWN ->
-                point = new Point(oldPoint.getX(), oldPoint.getY() + speed);
+            case LEFT -> point = new Point(oldPoint.getX() - speed, oldPoint.getY());
+            case RIGHT -> point = new Point(oldPoint.getX() + speed, oldPoint.getY());
+            case UP -> point = new Point(oldPoint.getX(), oldPoint.getY() - speed);
+            case DOWN -> point = new Point(oldPoint.getX(), oldPoint.getY() + speed);
         }
         System.out.println("Корабль передвинулся в точку: " + point);
         fireShipIsMoved();
     }
 
-    public void fire() {}
+    public void fire(DirectionObjectMovment directionObjectMovment) {}
 
     private List<ShipActionListener> shipActionListeners = new ArrayList<>();
 
-    public void addShipActionListener(ShipActionListener listener) { shipActionListeners.add(listener); }
+    public void addShipActionListener(ShipActionListener listener) {
+        shipActionListeners.add(listener);
+    }
 
-    public void removeShipActionListener(ShipActionListener listener) { shipActionListeners.remove(listener); }
+    public void removeShipActionListener(ShipActionListener listener) {
+        shipActionListeners.remove(listener);
+    }
 
     public void fireShipIsMoved() {
         for(ShipActionListener listener : shipActionListeners) {
