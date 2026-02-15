@@ -25,4 +25,8 @@ public class EnemyCommander {
     public List<EnemyPilot> getEnemyPilotList() {
         return enemyPilotList;
     }
+
+    public int getNumberLivePilots() {
+        return enemyPilotList.size();
+    }
 }

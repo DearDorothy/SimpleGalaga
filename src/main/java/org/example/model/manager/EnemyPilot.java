@@ -4,7 +4,7 @@ import org.example.model.ActionPilot;
 import org.example.model.DirectionObjectMovment;
 import org.example.model.field.Ship;
 
-public class EnemyPilot implements PilotManager {
+public class EnemyPilot {
 
     private Ship ship;
 
@@ -16,7 +16,6 @@ public class EnemyPilot implements PilotManager {
         return ship;
     }
 
-    @Override
     public void shipControl(ActionPilot actionPilot, DirectionObjectMovment directionObjectMovment) {
         switch (actionPilot) {
             case MOVE -> ship.move(directionObjectMovment);

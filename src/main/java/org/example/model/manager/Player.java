@@ -6,7 +6,7 @@ import org.example.model.field.Ship;
 
 import java.util.List;
 
-public class Player implements PilotManager{
+public class Player {
 
     private List<Ship> fleetShip;
     private Ship activeShip;
@@ -31,7 +31,10 @@ public class Player implements PilotManager{
         return fleetShip;
     }
 
-    @Override
+    public int getNumberNndestroyedShips() {
+        return fleetShip.size();
+    }
+
     public void shipControl(ActionPilot actionPilot, DirectionObjectMovment directionObjectMovment) {
         switch (actionPilot) {
             case MOVE -> activeShip.move(directionObjectMovment);
