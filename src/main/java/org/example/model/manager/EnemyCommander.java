@@ -7,11 +7,9 @@ import java.util.List;
 
 public class EnemyCommander {
 
-    private List<EnemyPilot> enemyPilotList;
+    private List<EnemyPilot> enemyPilotList = new ArrayList<>();
 
-    public EnemyCommander() {
-        enemyPilotList = new ArrayList<>();
-    }
+    public EnemyCommander() {}
 
     public void transferShipsToPilots(List<Ship> shipList) {
         for (Ship ship : shipList) {

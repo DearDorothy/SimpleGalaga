@@ -19,6 +19,8 @@ public class Player {
         System.out.println("Игрок получил флот кораблей размером в " + fleetShip.size());
     }
 
+    public void swapActiveShip() {}
+
     public void setActiveShip(Ship activeShip) {
         this.activeShip = activeShip;
     }

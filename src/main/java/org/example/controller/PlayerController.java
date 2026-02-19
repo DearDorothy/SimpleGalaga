@@ -3,7 +3,9 @@ package org.example.controller;
 import org.example.model.ActionPilot;
 import org.example.model.DirectionObjectMovment;
 import org.example.model.field.Field;
+import org.example.model.field.Ship;
 import org.example.model.manager.Player;
+import org.example.utils.Delays;
 
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -32,11 +34,11 @@ public class PlayerController extends KeyAdapter {
 
     private void startTimers() {
         // Таймер движений
-        moveTimer = new Timer(25, e -> hudleInput());
+        moveTimer = new Timer(Delays.MOVE_DELAY, e -> hudleInput());
         moveTimer.start();
 
         // Таймер стрельбы
-        fireTimer = new Timer(300, e -> {
+        fireTimer = new Timer(Delays.FIRE_DELAY, e -> {
             canFire = true;
             fireTimer.stop();
         });
@@ -51,18 +53,27 @@ public class PlayerController extends KeyAdapter {
     public void hudleInput() {
 
         int sizeShipWidget = player.getActiveShip().getSizeCollisionModel();
+        Ship activeShip = player.getActiveShip();
 
-        if (leftButtonPressed && player.getActiveShip().getPoint().getX() > 0)
+        if (leftButtonPressed && activeShip.getPoint().getX() > 0) {
+            int lim = activeShip.getPoint().getX();
+            activeShip.setSpeed(correctSpeed(lim));
             player.shipControl(ActionPilot.MOVE, DirectionObjectMovment.LEFT);
-
-        if (rightButtonPressed && player.getActiveShip().getPoint().getX() < (field.getWidth() - sizeShipWidget))
+        }
+        if (rightButtonPressed && activeShip.getPoint().getX() < (field.getWidth() - sizeShipWidget)) {
+            int lim = Math.abs(activeShip.getPoint().getX() - (field.getWidth() - sizeShipWidget));
+            activeShip.setSpeed(correctSpeed(lim));
             player.shipControl(ActionPilot.MOVE, DirectionObjectMovment.RIGHT);
-
+        }
         if (spaceButtonPressed && canFire) {
             player.shipControl(ActionPilot.FIRE, DirectionObjectMovment.UP);
             canFire = false;
             fireTimer.start();
         }
+    }
+
+    private int correctSpeed(int lim) {
+        return player.getActiveShip().getSpeed() > lim ? lim : 5;
     }
 
     @Override

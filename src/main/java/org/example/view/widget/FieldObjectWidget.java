@@ -17,10 +17,14 @@ public abstract class FieldObjectWidget extends JPanel {
         setPreferredSize(getDimension());
     }
 
-    /*
+    public FieldObject getFieldObject() {
+        return fieldObject;
+    }
+
+    /**
     * Получить изображение виджета
     * @return изображение виджета
-    * */
+    */
     protected abstract BufferedImage getImage();
 
     protected abstract File getImageFile();
@@ -33,6 +37,6 @@ public abstract class FieldObjectWidget extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(getImage(), fieldObject.getPoint().getX(), fieldObject.getPoint().getY(), this);
+        g.drawImage(getImage(), 0, 0, this);
     }
 }

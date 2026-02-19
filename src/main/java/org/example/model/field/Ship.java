@@ -24,47 +24,39 @@ public class Ship extends FieldObject{
             case DOWN -> point = new Point(oldPoint.getX(), oldPoint.getY() + speed);
         }
         System.out.println("Корабль передвинулся в точку: " + point);
-        fireShipIsMoved();
+        fireShipIsMoved(directionObjectMovment);
     }
 
     public void fire(DirectionObjectMovment directionObjectMovment) {
-        Bullet bullet = new Bullet(getPoint(), getOwnerObject());
+        Point point = new Point(getPoint().getX() + sizeCollisionModel/2, getPoint().getY());
+        Bullet bullet = new Bullet(point, ownerObject);
         System.out.println("Корабль выстрелил");
-        fireShipIsFired(bullet, directionObjectMovment);
+        fireShipIsFired(directionObjectMovment);
     }
 
-    private List<ShipMoveListener> shipMoveListeners = new ArrayList<>();
+    private List<ShipActionListener> shipActionListeners = new ArrayList<>();
 
-    public void addShipMoveListener(ShipMoveListener listener) {
-        shipMoveListeners.add(listener);
+    public void addShipActionListener(ShipActionListener listener) {
+        shipActionListeners.add(listener);
     }
 
-    public void removeShipMoveListener(ShipMoveListener listener) {
-        shipMoveListeners.remove(listener);
+    public void removeShipActionListener(ShipActionListener listener) {
+        shipActionListeners.remove(listener);
     }
 
-    private void fireShipIsMoved() {
-        for(ShipMoveListener listener: shipMoveListeners) {
-            ShipMoveEvent event = new ShipMoveEvent(this);
+    private void fireShipIsMoved(DirectionObjectMovment directionObjectMovment) {
+        for(ShipActionListener listener: shipActionListeners) {
+            ShipActionEvent event = new ShipActionEvent(this);
             event.setShip(this);
+            event.setDirectionObjectMovment(directionObjectMovment);
             listener.shipIsMoved(event);
         }
     }
 
-    private List<ShipFireListener> shipFireListeners = new ArrayList<>();
-
-    public void addShipFireListener(ShipFireListener listener) {
-        shipFireListeners.add(listener);
-    }
-
-    public void removeShipFireListener(ShipFireListener listener) {
-        shipFireListeners.remove(listener);
-    }
-
-    private void fireShipIsFired(Bullet bullet, DirectionObjectMovment directionObjectMovment) {
-        for(ShipFireListener listener: shipFireListeners) {
-            ShipFireEvent event = new ShipFireEvent(this);
-            event.setBullet(bullet);
+    private void fireShipIsFired(DirectionObjectMovment directionObjectMovment) {
+        for(ShipActionListener listener: shipActionListeners) {
+            ShipActionEvent event = new ShipActionEvent(this);
+            event.setShip(this);
             event.setDirectionObjectMovment(directionObjectMovment);
             listener.shipIsFire(event);
         }

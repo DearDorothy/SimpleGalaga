@@ -39,5 +39,9 @@ public abstract class FieldObject {
         return sizeCollisionModel;
     }
 
+    public int getSpeed() {
+        return speed;
+    }
+
     abstract public void move(DirectionObjectMovment directionObjectMovment);
 }

@@ -20,14 +20,17 @@ public class Game {
     private final Field field;
     private GameStatus gameStatus;
 
+    private final int NUMBER_PLAYER_SHIP = 1;
+    private final int NUMBER_ENEMY_SHIP = 15;
+
     public Game(Player player, EnemyCommander enemyCommander, Field field) {
         this.player = player;
         this.enemyCommander = enemyCommander;
         this.field = field;
-        start();
+        this.field.addFieldActionListener(new FieldActionObserver());
     }
 
-    private void start() {
+    public void start() {
         setGameStatus(GameStatus.RUNNING);
         transferShipsToCommanders();
 
@@ -62,8 +65,8 @@ public class Game {
     }
 
     private void transferShipsToCommanders() {
-        List<Ship> shipListForPlayer = field.createShips(3, OwnerObject.PLAYER);
-        List<Ship> shipListForEnemy = field.createShips(12, OwnerObject.ENEMY);
+        List<Ship> shipListForPlayer = field.createShips(NUMBER_PLAYER_SHIP, OwnerObject.PLAYER);
+        List<Ship> shipListForEnemy = field.createShips(NUMBER_ENEMY_SHIP, OwnerObject.ENEMY);
 
         player.setFleetShip(shipListForPlayer);
         enemyCommander.transferShipsToPilots(shipListForEnemy);
@@ -94,7 +97,7 @@ public class Game {
         }
     }
 
-    private class FieldObserver implements FieldActionListener {
+    private class FieldActionObserver implements FieldActionListener {
         @Override
         public void fieldObjectsCollide(FieldActionEvent event) {
 
