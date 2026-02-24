@@ -16,7 +16,7 @@ import javax.swing.Timer;
 public class PlayerController extends KeyAdapter {
 
     private Player player;
-    private Field field;
+    private int fieldWidth;
     private boolean leftButtonPressed = false;
     private boolean rightButtonPressed = false;
     private boolean spaceButtonPressed = false;
@@ -25,9 +25,9 @@ public class PlayerController extends KeyAdapter {
     private Timer moveTimer;
     private Timer fireTimer;
 
-    public PlayerController(Player player, Field field) {
+    public PlayerController(Player player, int fieldWidth) {
         this.player = player;
-        this.field = field;
+        this.fieldWidth = fieldWidth;
 
         startTimers();
     }
@@ -60,8 +60,8 @@ public class PlayerController extends KeyAdapter {
             activeShip.setSpeed(correctSpeed(lim));
             player.shipControl(ActionPilot.MOVE, DirectionObjectMovment.LEFT);
         }
-        if (rightButtonPressed && activeShip.getPoint().getX() < (field.getWidth() - sizeShipWidget)) {
-            int lim = Math.abs(activeShip.getPoint().getX() - (field.getWidth() - sizeShipWidget));
+        if (rightButtonPressed && activeShip.getPoint().getX() < (fieldWidth - sizeShipWidget)) {
+            int lim = Math.abs(activeShip.getPoint().getX() - (fieldWidth - sizeShipWidget));
             activeShip.setSpeed(correctSpeed(lim));
             player.shipControl(ActionPilot.MOVE, DirectionObjectMovment.RIGHT);
         }
@@ -73,7 +73,7 @@ public class PlayerController extends KeyAdapter {
     }
 
     private int correctSpeed(int lim) {
-        return player.getActiveShip().getSpeed() > lim ? lim : 5;
+        return player.getActiveShip().getSpeed() > lim ? lim : 3;
     }
 
     @Override

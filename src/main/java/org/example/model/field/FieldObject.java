@@ -9,6 +9,8 @@ public abstract class FieldObject {
     protected int speed;
     protected OwnerObject ownerObject;
     protected int sizeCollisionModel;
+    protected boolean isLethal = false;
+    protected boolean isAlive = true;
 
     public FieldObject(Point point, OwnerObject ownerObject) {
         this.point = point;
@@ -27,6 +29,14 @@ public abstract class FieldObject {
         this.sizeCollisionModel = sizeCollisionModel;
     }
 
+    public void setLethal(boolean lethal) {
+        this.isLethal = lethal;
+    }
+
+    public void setAlive(boolean isAlive) {
+        this.isAlive = isAlive;
+    }
+
     public Point getPoint() {
         return point;
     }
@@ -43,5 +53,17 @@ public abstract class FieldObject {
         return speed;
     }
 
+    public boolean isLethal() {
+        return isLethal;
+    }
+
+    public boolean isAlive() {
+        return isAlive;
+    }
+
     abstract public void move(DirectionObjectMovment directionObjectMovment);
+
+    abstract public void collide(FieldObject object);
+
+    abstract public void destroy();
 }

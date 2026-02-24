@@ -5,7 +5,6 @@ import org.example.model.field.Bullet;
 import org.example.model.field.Field;
 import org.example.model.field.FieldObject;
 import org.example.model.field.Ship;
-import org.example.view.adapter.ShipActionAdapter;
 import org.example.view.widget.BulletWidget;
 import org.example.view.widget.FieldObjectWidget;
 import org.example.view.widget.ShipWidget;
@@ -28,10 +27,12 @@ public class FieldWidget extends JPanel {
         subscribeToEvents();
     }
 
+    public Field getField() {
+        return field;
+    }
+
     private void subscribeToEvents() {
-        field.addFieldActionListener(new FieldActionObserver());
         field.addFieldObjectListener(new FieldObjectObserver());
-        field.addShipActionListener(new ShipActionObserver());
     }
 
     private void addWidget(FieldObject object) {
@@ -47,6 +48,13 @@ public class FieldWidget extends JPanel {
         }
     }
 
+    private void removeWidget(FieldObject object) {
+        FieldObjectWidget widget = objectWidgetMap.remove(object);
+        if (widget != null) {
+            remove(widget);
+        }
+    }
+
     private void updateWidgetBounds(FieldObject obj) {
         FieldObjectWidget widget = objectWidgetMap.get(obj);
         if (widget != null) {
@@ -57,40 +65,24 @@ public class FieldWidget extends JPanel {
         }
     }
 
-    private class FieldActionObserver implements FieldActionListener {
-        @Override
-        public void fieldObjectsCollide(FieldActionEvent event) {
-
-        }
-    }
-
     private class FieldObjectObserver implements FieldObjectListener {
         @Override
         public void addFieldObjectOnField(FieldObjectEvent event) {
             FieldObject fieldObject = event.getFieldObject();
-            if (fieldObject instanceof Bullet) {
-                System.out.println("Отрисовка пули в точке: " + fieldObject.getPoint());
-            }
-            if (fieldObject instanceof Ship) {
-                System.out.println("Отрисовка корабля в точке: " + fieldObject.getPoint());
-            }
             addWidget(fieldObject);
             updateWidgetBounds(fieldObject);
         }
 
         @Override
         public void removeFieldObjectFromField(FieldObjectEvent event) {
-
+            FieldObject object = event.getFieldObject();
+            removeWidget(object);
         }
-    }
 
-    private class ShipActionObserver extends ShipActionAdapter {
         @Override
-        public void shipIsMoved(ShipActionEvent event) {
-            super.shipIsMoved(event);
-            Ship ship = event.getShip();
-            System.out.println("Отрисовали корабль в точке: " + ship.getPoint());
-            updateWidgetBounds(ship);
+        public void fieldObjectIsMoved(FieldObjectEvent event) {
+            FieldObject object = event.getFieldObject();
+            updateWidgetBounds(object);
         }
     }
 }

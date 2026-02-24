@@ -23,7 +23,7 @@ public class SpawnerShips {
         int activeShipY = fieldHeight - SHIP_SIZE - PLAYER_START_Y_OFFSET;
         points.add(new Point(activeShipX, activeShipY));
 
-        // Доделать спавн кораблей иргока
+        // Доделать спавн кораблей игрока
         for(int i = 1; i < numberShips; i++) {
             int x = 0;
             int y = 0;

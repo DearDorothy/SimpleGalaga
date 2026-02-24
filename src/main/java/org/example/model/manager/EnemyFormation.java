@@ -1,54 +1,65 @@
 // EnemyFormation.java - управление движением флота врагов как единого целого
 package org.example.model.manager;
 
+import org.example.model.ActionPilot;
 import org.example.model.DirectionObjectMovment;
 import org.example.model.field.Field;
+import org.example.model.field.Ship;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EnemyFormation {
-    private List<EnemyPilot> pilots;
-    private Field field;
-    private boolean movingRight = true;
-    private int formationSpeed = 2;
 
-    public EnemyFormation(List<EnemyPilot> pilots, Field field) {
-        this.pilots = pilots;
-        this.field = field;
+    private List<EnemyPilot> enemyPilotList;
+    private int sizeShipModelCollision;
+    private int fieldWidth;
+    private int direction = 1;
+
+    public EnemyFormation(int fieldWidth, int sizeShipModelCollision) {
+        this.fieldWidth = fieldWidth;
+        this.sizeShipModelCollision = sizeShipModelCollision;
+    }
+
+    public void setEnemyPilotList(List<EnemyPilot> enemyPilotList) {
+        this.enemyPilotList = enemyPilotList;
     }
 
     public void update() {
-        if (pilots.isEmpty()) return;
+        if (isEmpty()) return;
 
-        // Проверяем, достиг ли флот границы
-        boolean shouldChangeDirection = false;
-        for (EnemyPilot pilot : pilots) {
-            int shipX = pilot.getShip().getPoint().getX();
-            if (movingRight && shipX > field.getWidth() - 40) {
-                shouldChangeDirection = true;
-                break;
-            } else if (!movingRight && shipX < 10) {
-                shouldChangeDirection = true;
-                break;
-            }
+        int speed = enemyPilotList.getFirst().getShip().getSpeed();
+
+        int minX = Integer.MAX_VALUE;
+        int maxX = Integer.MIN_VALUE;
+        for(EnemyPilot enemyPilot: enemyPilotList) {
+            Ship ship = enemyPilot.getShip();
+            int x = ship.getPoint().getX();
+            if (x < minX) minX = x;
+            if (x > maxX) maxX = x;
         }
 
-        if (shouldChangeDirection) {
-            movingRight = !movingRight;
-            // Опускаем флот вниз при развороте
-            for (EnemyPilot pilot : pilots) {
-                pilot.getShip().move(DirectionObjectMovment.DOWN);
-            }
+        int newMinX = minX + direction * speed;
+        int newMaxX = maxX + direction * speed;
+
+        if (newMinX < 0 || newMaxX > (fieldWidth - sizeShipModelCollision)) {
+            direction *= -1;
         } else {
-            // Двигаем весь флот
-            for (EnemyPilot pilot : pilots) {
-                pilot.getShip().move(movingRight ?
-                        DirectionObjectMovment.RIGHT : DirectionObjectMovment.LEFT);
+            DirectionObjectMovment directionMovment =
+                    direction == 1 ? DirectionObjectMovment.RIGHT : DirectionObjectMovment.LEFT;
+
+            for (EnemyPilot enemyPilot: enemyPilotList) {
+                enemyPilot.shipControl(ActionPilot.MOVE, directionMovment);
             }
         }
     }
 
-    public List<EnemyPilot> getPilots() {
-        return pilots;
+    public void removeEnemyPilot(EnemyPilot enemyPilot) {
+        if (enemyPilotList.contains(enemyPilot))
+            enemyPilotList.remove(enemyPilot);
+    }
+
+    public boolean isEmpty() {
+        return enemyPilotList.isEmpty();
     }
 }

@@ -11,7 +11,8 @@ public class Ship extends FieldObject{
 
     public Ship(Point point, OwnerObject ownerObject) {
         super(point, ownerObject);
-        setSpeed(5);
+        setSpeed(3);
+        setLethal(true);
     }
 
     @Override
@@ -23,15 +24,49 @@ public class Ship extends FieldObject{
             case UP -> point = new Point(oldPoint.getX(), oldPoint.getY() - speed);
             case DOWN -> point = new Point(oldPoint.getX(), oldPoint.getY() + speed);
         }
-        System.out.println("Корабль передвинулся в точку: " + point);
         fireShipIsMoved(directionObjectMovment);
     }
 
+    @Override
+    public void collide(FieldObject object) {
+        if (!isAlive) return;
+        if (ownerObject != object.ownerObject && object.isLethal()) {
+            destroy();
+        }
+    }
+
+    @Override
+    public void destroy() {
+        if (isAlive) {
+            setAlive(false);
+            fireShipIsDestroyed();
+        }
+    }
+
     public void fire(DirectionObjectMovment directionObjectMovment) {
-        Point point = new Point(getPoint().getX() + sizeCollisionModel/2, getPoint().getY());
-        Bullet bullet = new Bullet(point, ownerObject);
+//        Point point = new Point(getPoint().getX() + sizeCollisionModel/2, getPoint().getY());
+//        Bullet bullet = new Bullet(point, ownerObject);
         System.out.println("Корабль выстрелил");
         fireShipIsFired(directionObjectMovment);
+    }
+
+    private List<FieldObjectListener> fieldObjectListeners = new ArrayList<>();
+
+    public void addFieldObjectListener(FieldObjectListener listener) {
+        fieldObjectListeners.add(listener);
+    }
+
+    public void removeFieldObjectListener(FieldObjectListener listener) {
+        fieldObjectListeners.remove(listener);
+    }
+
+    private void fireShipIsMoved(DirectionObjectMovment directionObjectMovment) {
+        for(FieldObjectListener listener: fieldObjectListeners) {
+            FieldObjectEvent event = new FieldObjectEvent(this);
+            event.setFieldObject(this);
+            event.setDirectionObjectMovment(directionObjectMovment);
+            listener.fieldObjectIsMoved(event);
+        }
     }
 
     private List<ShipActionListener> shipActionListeners = new ArrayList<>();
@@ -44,21 +79,20 @@ public class Ship extends FieldObject{
         shipActionListeners.remove(listener);
     }
 
-    private void fireShipIsMoved(DirectionObjectMovment directionObjectMovment) {
-        for(ShipActionListener listener: shipActionListeners) {
-            ShipActionEvent event = new ShipActionEvent(this);
-            event.setShip(this);
-            event.setDirectionObjectMovment(directionObjectMovment);
-            listener.shipIsMoved(event);
-        }
-    }
-
     private void fireShipIsFired(DirectionObjectMovment directionObjectMovment) {
         for(ShipActionListener listener: shipActionListeners) {
             ShipActionEvent event = new ShipActionEvent(this);
             event.setShip(this);
             event.setDirectionObjectMovment(directionObjectMovment);
             listener.shipIsFire(event);
+        }
+    }
+
+    private void fireShipIsDestroyed() {
+        for(ShipActionListener listener: shipActionListeners) {
+            ShipActionEvent event = new ShipActionEvent(this);
+            event.setShip(this);
+            listener.shipIsDestroyed(event);
         }
     }
 }

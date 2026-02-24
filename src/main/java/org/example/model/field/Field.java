@@ -1,9 +1,10 @@
 package org.example.model.field;
 
+import org.example.adapter.FieldObjectAdapter;
+import org.example.adapter.ShipActionAdapter;
+import org.example.model.DirectionObjectMovment;
 import org.example.model.OwnerObject;
 import org.example.model.event.*;
-import org.example.model.field.Point;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,10 +18,26 @@ public class Field {
     private final int width = 350;
     private final int height = 600;
     private final int SIZE_COLLISION_MODEL_SHIP = 35;
-    private final int SIZE_COLLISION_MODEL_BULLET = 25;
+    private final int SIZE_COLLISION_MODEL_BULLET = 20;
     private List<FieldObject> objectList = new ArrayList<>();
 
     public Field() {}
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int get_SIZE_COLLISION_MODEL_SHIP() {
+        return SIZE_COLLISION_MODEL_SHIP;
+    }
+
+    public List<FieldObject> getObjectList() {
+        return objectList;
+    }
 
     public List<Ship> createShips(int numberShips, OwnerObject owner) {
         List<Ship> shipList = new ArrayList<>();
@@ -34,6 +51,7 @@ public class Field {
             currentShip.setSizeCollisionModel(SIZE_COLLISION_MODEL_SHIP);
 
             currentShip.addShipActionListener(new ShipActionObserver());
+            currentShip.addFieldObjectListener(new FieldOblectMoveObsrerver());
 
             shipList.add(currentShip);
             addObject(currentShip);
@@ -52,22 +70,60 @@ public class Field {
         return pointList;
     }
 
-    public int getWidth() {
-        return width;
-    }
+    public void updateBullets() {
+        for (FieldObject obj : objectList) {
+            if (obj instanceof Bullet) {
+                Bullet bullet = (Bullet) obj;
+                if (!bullet.isAlive()) continue;
 
-    public int getHeight() {
-        return height;
-    }
+                if (bullet.getOwnerObject() == OwnerObject.PLAYER) {
+                    bullet.move(DirectionObjectMovment.UP);
+                } else if (bullet.getOwnerObject() == OwnerObject.ENEMY) {
+                    bullet.move(DirectionObjectMovment.DOWN);
+                }
 
-    public List<FieldObject> getObjectList() {
-        return objectList;
+                int y = bullet.getPoint().getY();
+                if (y < 0 || y > height) {
+                    bullet.destroy();
+                }
+            }
+        }
     }
 
     public void detectCollision() {
-        // List<FieldObject[]> listCollidedObjects = CollisionDetector.detectCollisions(objectList);
-        // fireFieldObjectsCollide(listCollidedObjects);
-        // removeObjects();
+        for (int i = 0; i < objectList.size(); i++) {
+            for (int j = i + 1; j < objectList.size(); j++) {
+                FieldObject object1 = objectList.get(i);
+                FieldObject object2 = objectList.get(j);
+                if (object1.isAlive() && object2.isAlive() && areColliding(object1, object2)) {
+                    object1.collide(object2);
+                    object2.collide(object1);
+                }
+            }
+        }
+
+        List<FieldObject> dead = new ArrayList<>();
+        for (FieldObject object : objectList) {
+            if (!object.isAlive()) {
+                dead.add(object);
+            }
+        }
+        removeObjects(dead);
+    }
+
+    private boolean areColliding(FieldObject object1, FieldObject object2) {
+        int obj1X = object1.getPoint().getX();
+        int obj1Y = object1.getPoint().getY();
+        int obj2X = object2.getPoint().getX();
+        int obj2Y = object2.getPoint().getY();
+
+        int size1 = object1.getSizeCollisionModel();
+        int size2 = object2.getSizeCollisionModel();
+
+        return obj1X < obj2X + size2 &&
+                obj1X + size1 > obj2X &&
+                obj1Y < obj2Y + size2 &&
+                obj1Y + size1 > obj2Y;
     }
 
     private void addObject(FieldObject object) {
@@ -78,60 +134,32 @@ public class Field {
     private void removeObjects(List<FieldObject> objects) {
         for(FieldObject object: objects) {
             objectList.remove(object);
+            fireRemovedFieldObjectFromField(object);
         }
     }
 
-    private List<FieldActionListener> fieldActionListeners = new ArrayList<>();
-
-    public void addFieldActionListener(FieldActionListener listener) {
-        fieldActionListeners.add(listener);
-    }
-
-    public void removeFieldActionListener(FieldActionListener listener) {
-        fieldActionListeners.remove(listener);
-    }
-
-    private void fireFieldObjectsCollide(List<FieldObject> listCollidedObjects) {
-        for(FieldActionListener listener: fieldActionListeners) {
-            FieldActionEvent event = new FieldActionEvent(this);
-            event.setListCollidedObjects(listCollidedObjects);
-            listener.fieldObjectsCollide(event);
-        }
-    }
-
-    private class ShipActionObserver implements ShipActionListener {
-        @Override
-        public void shipIsMoved(ShipActionEvent event) {
-            System.out.println("Передвинулся ");
-            fireShipIsMoved(event);
-        }
-
+    private class ShipActionObserver extends ShipActionAdapter {
         @Override
         public void shipIsFire(ShipActionEvent event) {
+            super.shipIsFire(event);
             Ship ship = event.getShip();
             int xForBullet = ship.getPoint().getX() + (SIZE_COLLISION_MODEL_SHIP - SIZE_COLLISION_MODEL_BULLET)/2;
             int yForBullet = ship.getPoint().getY();
             Point pointForBullet = new Point(xForBullet, yForBullet);
+
             Bullet bullet = new Bullet(pointForBullet, ship.getOwnerObject());
+            bullet.addFieldObjectListener(new FieldOblectMoveObsrerver());
             bullet.setSizeCollisionModel(SIZE_COLLISION_MODEL_BULLET);
+
             System.out.println("Выстрелил дошло до поля");
             addObject(bullet);
         }
     }
 
-    private List<ShipActionListener> shipActionListeners = new ArrayList<>();
-
-    public void addShipActionListener(ShipActionListener listener) {
-        shipActionListeners.add(listener);
-    }
-
-    public void removeShipActionListener(ShipActionListener listener) {
-        shipActionListeners.remove(listener);
-    }
-
-    private void fireShipIsMoved(ShipActionEvent event) {
-        for(ShipActionListener listener: shipActionListeners) {
-            listener.shipIsMoved(event);
+    private class FieldOblectMoveObsrerver extends FieldObjectAdapter {
+        @Override
+        public void fieldObjectIsMoved(FieldObjectEvent event) {
+            fireFieldObjectIsMoved(event);
         }
     }
 
@@ -158,6 +186,12 @@ public class Field {
             FieldObjectEvent event = new FieldObjectEvent(this);
             event.setFieldObject(object);
             listener.removeFieldObjectFromField(event);
+        }
+    }
+
+    private void fireFieldObjectIsMoved(FieldObjectEvent event) {
+        for(FieldObjectListener listener: fieldObjectListeners) {
+            listener.fieldObjectIsMoved(event);
         }
     }
 }
