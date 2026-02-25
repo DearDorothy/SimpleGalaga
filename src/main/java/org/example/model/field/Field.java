@@ -42,10 +42,8 @@ public class Field {
     public List<Ship> createShips(int numberShips, OwnerObject owner) {
         List<Ship> shipList = new ArrayList<>();
 
-        // Создать точки стартовых положений для кораблей соотв. владельца
         List<Point> pointList = createStartPositionsForShips(numberShips, owner);
 
-        // Создание кораблей
         for(int i = 0; i < numberShips; i++) {
             Ship currentShip = new Ship(pointList.get(i), owner);
             currentShip.setSizeCollisionModel(SIZE_COLLISION_MODEL_SHIP);

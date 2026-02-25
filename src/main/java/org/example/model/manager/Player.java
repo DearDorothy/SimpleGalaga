@@ -4,20 +4,26 @@ import org.example.adapter.ShipActionAdapter;
 import org.example.model.ActionPilot;
 import org.example.model.DirectionObjectMovment;
 import org.example.model.event.ShipActionEvent;
+import org.example.model.field.Point;
 import org.example.model.field.Ship;
 
 import java.util.List;
 
 public class Player {
 
-    private final int NUMBER_SHIP = 1;
+    private final int NUMBER_SHIP = 3;
     private List<Ship> fleetShip;
     private Ship activeShip;
+    private Point startPoint;
 
     public Player() {}
 
     public void setActiveShip(Ship activeShip) {
         this.activeShip = activeShip;
+    }
+
+    public void setStartPoint(Point point) {
+        startPoint = point;
     }
 
     public Ship getActiveShip() {
@@ -33,7 +39,7 @@ public class Player {
     }
 
     public int getNumberNndestroyedShips() {
-        return fleetShip.size();
+        return (int) fleetShip.stream().filter(Ship::isAlive).count();
     }
 
     public void setFleetShip(List<Ship> fleetShip) {
@@ -62,6 +68,9 @@ public class Player {
         }
         if (ship == activeShip) {
             activeShip = fleetShip.get(0);
+            if (startPoint != null) {
+                activeShip.setPosition(startPoint);
+            }
         }
     }
 

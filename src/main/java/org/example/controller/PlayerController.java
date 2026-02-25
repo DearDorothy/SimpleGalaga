@@ -52,8 +52,13 @@ public class PlayerController extends KeyAdapter {
 
     public void hudleInput() {
 
-        int sizeShipWidget = player.getActiveShip().getSizeCollisionModel();
         Ship activeShip = player.getActiveShip();
+
+        if (activeShip == null) {
+            return;
+        }
+
+        int sizeShipWidget = player.getActiveShip().getSizeCollisionModel();
 
         if (leftButtonPressed && activeShip.getPoint().getX() > 0) {
             int lim = activeShip.getPoint().getX();
@@ -79,18 +84,36 @@ public class PlayerController extends KeyAdapter {
     @Override
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_LEFT -> leftButtonPressed = true;
-            case KeyEvent.VK_RIGHT -> rightButtonPressed = true;
-            case KeyEvent.VK_SPACE -> spaceButtonPressed = true;
+            case KeyEvent.VK_LEFT -> {
+                leftButtonPressed = true;
+                break;
+            }
+            case KeyEvent.VK_RIGHT -> {
+                rightButtonPressed = true;
+                break;
+            }
+            case KeyEvent.VK_SPACE -> {
+                spaceButtonPressed = true;
+                break;
+            }
         }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_LEFT -> leftButtonPressed = false;
-            case KeyEvent.VK_RIGHT -> rightButtonPressed = false;
-            case KeyEvent.VK_SPACE -> spaceButtonPressed = false;
+            case KeyEvent.VK_LEFT -> {
+                leftButtonPressed = false;
+                break;
+            }
+            case KeyEvent.VK_RIGHT -> {
+                rightButtonPressed = false;
+                break;
+            }
+            case KeyEvent.VK_SPACE -> {
+                spaceButtonPressed = false;
+                break;
+            }
         }
     }
 }

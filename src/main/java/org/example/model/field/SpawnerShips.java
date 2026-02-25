@@ -25,8 +25,8 @@ public class SpawnerShips {
 
         // Доделать спавн кораблей игрока
         for(int i = 1; i < numberShips; i++) {
-            int x = 0;
-            int y = 0;
+            int x = -SHIP_SIZE - 50 * i;
+            int y = -SHIP_SIZE - 50 * i;
             points.add(new Point(x, y));
         }
 

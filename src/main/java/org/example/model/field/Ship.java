@@ -15,16 +15,33 @@ public class Ship extends FieldObject{
         setLethal(true);
     }
 
+    public void setPosition(Point point) {
+        this.point = point;
+        fireShipIsMoved();
+    }
+
     @Override
     public void move(DirectionObjectMovment directionObjectMovment) {
         Point oldPoint = point;
         switch(directionObjectMovment) {
-            case LEFT -> point = new Point(oldPoint.getX() - speed, oldPoint.getY());
-            case RIGHT -> point = new Point(oldPoint.getX() + speed, oldPoint.getY());
-            case UP -> point = new Point(oldPoint.getX(), oldPoint.getY() - speed);
-            case DOWN -> point = new Point(oldPoint.getX(), oldPoint.getY() + speed);
+            case LEFT -> {
+                point = new Point(oldPoint.getX() - speed, oldPoint.getY());
+                break;
+            }
+            case RIGHT -> {
+                point = new Point(oldPoint.getX() + speed, oldPoint.getY());
+                break;
+            }
+            case UP -> {
+                point = new Point(oldPoint.getX(), oldPoint.getY() - speed);
+                break;
+            }
+            case DOWN -> {
+                point = new Point(oldPoint.getX(), oldPoint.getY() + speed);
+                break;
+            }
         }
-        fireShipIsMoved(directionObjectMovment);
+        fireShipIsMoved();
     }
 
     @Override
@@ -44,8 +61,6 @@ public class Ship extends FieldObject{
     }
 
     public void fire(DirectionObjectMovment directionObjectMovment) {
-//        Point point = new Point(getPoint().getX() + sizeCollisionModel/2, getPoint().getY());
-//        Bullet bullet = new Bullet(point, ownerObject);
         System.out.println("Корабль выстрелил");
         fireShipIsFired(directionObjectMovment);
     }
@@ -60,11 +75,10 @@ public class Ship extends FieldObject{
         fieldObjectListeners.remove(listener);
     }
 
-    private void fireShipIsMoved(DirectionObjectMovment directionObjectMovment) {
+    private void fireShipIsMoved() {
         for(FieldObjectListener listener: fieldObjectListeners) {
             FieldObjectEvent event = new FieldObjectEvent(this);
             event.setFieldObject(this);
-            event.setDirectionObjectMovment(directionObjectMovment);
             listener.fieldObjectIsMoved(event);
         }
     }

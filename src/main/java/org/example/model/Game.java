@@ -3,6 +3,7 @@ package org.example.model;
 import org.example.model.event.GameActionEvent;
 import org.example.model.event.GameActionListener;
 import org.example.model.field.Field;
+import org.example.model.field.Point;
 import org.example.model.field.Ship;
 import org.example.model.manager.EnemyCommander;
 import org.example.model.manager.EnemyFormation;
@@ -29,7 +30,6 @@ public class Game {
 
         EnemyFormation enemyFormation = new EnemyFormation(field.getWidth(), field.get_SIZE_COLLISION_MODEL_SHIP());
         enemyCommander = new EnemyCommander(enemyFormation);
-
     }
 
     public Player getPlayer() {
@@ -58,17 +58,25 @@ public class Game {
     public void start() {
         setGameStatus(GameStatus.RUNNING);
         transferShipsToCommanders();
-        startUpdateEnemyFormation();
+        startGameLoop();
         System.out.println("Игра стартовала");
     }
 
-    private void startUpdateEnemyFormation() {
-        gameTimer = new Timer(Delays.MOVE_DELAY, e -> {
+    private void startGameLoop() {
+        gameTimer = new Timer(Delays.GAME_DELAY, e -> {
+            long currentTime = System.currentTimeMillis();
             if (gameStatus == GameStatus.RUNNING) {
                 updateEnemyFaromation();
                 updateBullets();
                 detectCollision();
-                //System.out.println(field.getObjectList().size());
+                tryToShootEnemyPilot(currentTime);
+
+                GameStatus status = determineOutcomeGame();
+                if (status != GameStatus.RUNNING) {
+                    System.out.println(status);
+                    setGameStatus(status);
+                    stopGameLoop();
+                }
             }
         });
         gameTimer.start();
@@ -86,17 +94,33 @@ public class Game {
         field.detectCollision();
     }
 
-    public void stop() {
-        setGameStatus(GameStatus.STOP);
-    }
-
-    public void  paused() {
-        setGameStatus(GameStatus.PAUSED);
+    private void tryToShootEnemyPilot(long currentTime) {
+        enemyCommander.tryToShoot(currentTime);
     }
 
     private GameStatus determineOutcomeGame() {
-        GameStatus result = GameStatus.RUNNING;
-        return result;
+        GameStatus status;
+
+        int playerShips = player.getNumberNndestroyedShips();
+        int enemyPilots = enemyCommander.getNumberLivePilots();
+
+        if (playerShips == 0 && enemyPilots == 0) {
+            status = GameStatus.DRAW;
+        } else if (playerShips == 0) {
+            status = GameStatus.ENEMY_WIN;
+        } else if (enemyPilots == 0) {
+            status = GameStatus.PLAYER_WIN;
+        } else {
+            status = GameStatus.RUNNING;
+        }
+
+        return status;
+    }
+
+    private void stopGameLoop() {
+        if (gameTimer != null) {
+            gameTimer.stop();
+        }
     }
 
     private void transferShipsToCommanders() {
@@ -105,6 +129,10 @@ public class Game {
         int numberEnemyPilot = enemyCommander.getNumebrPilot();
 
         List<Ship> shipListForPlayer = field.createShips(numberShipPLayer, OwnerObject.PLAYER);
+        if (!shipListForPlayer.isEmpty()) {
+            Point startPoint = shipListForPlayer.get(0).getPoint();
+            player.setStartPoint(startPoint);
+        }
         List<Ship> shipListForEnemy = field.createShips(numberEnemyPilot, OwnerObject.ENEMY);
 
         player.setFleetShip(shipListForPlayer);

@@ -5,6 +5,5 @@ public enum GameStatus {
     PLAYER_WIN,
     ENEMY_WIN,
     DRAW,
-    PAUSED,
     STOP
 }

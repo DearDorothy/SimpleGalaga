@@ -1,17 +1,23 @@
 package org.example.model.manager;
 
+import org.example.model.ActionPilot;
+import org.example.model.DirectionObjectMovment;
 import org.example.model.event.EnemyPilotEvent;
 import org.example.model.event.EnemyPilotListener;
 import org.example.model.field.Ship;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class EnemyCommander {
 
     private final int NUMBER_PILOT = 15;
     private List<EnemyPilot> enemyPilotList = new ArrayList<>();
     private EnemyFormation enemyFormation;
+    private long lastShotTime = 0;
+    private static final long SHOT_INTERVAL = 3000;
+    private Random random = new Random();
 
     public EnemyCommander(EnemyFormation enemyFormation) {
         this.enemyFormation = enemyFormation;
@@ -30,7 +36,7 @@ public class EnemyCommander {
     }
 
     public int getNumberLivePilots() {
-        return enemyPilotList.size();
+        return (int) enemyPilotList.stream().map(EnemyPilot::getShip).filter(Ship::isAlive).count();
     }
 
     public void transferShipsToPilots(List<Ship> shipList) {
@@ -49,6 +55,17 @@ public class EnemyCommander {
     public void updateFormation() {
         if (enemyFormation != null) {
             enemyFormation.update();
+        }
+    }
+
+    public void tryToShoot(long currentTime) {
+        if (enemyPilotList.isEmpty()) return;
+
+        if (currentTime - lastShotTime >= SHOT_INTERVAL) {
+            int index = random.nextInt(enemyPilotList.size());
+            EnemyPilot pilot = enemyPilotList.get(index);
+            pilot.shipControl(ActionPilot.FIRE, DirectionObjectMovment.DOWN);
+            lastShotTime = currentTime;
         }
     }
 
