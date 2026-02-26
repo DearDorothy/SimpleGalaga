@@ -1,9 +1,9 @@
 package org.example.model.manager;
 
 import org.example.model.ActionPilot;
-import org.example.model.DirectionObjectMovment;
 import org.example.model.event.EnemyPilotEvent;
 import org.example.model.event.EnemyPilotListener;
+import org.example.model.field.bullet.ammo.NormalAmmo;
 import org.example.model.field.Ship;
 
 import java.util.ArrayList;
@@ -64,7 +64,8 @@ public class EnemyCommander {
         if (currentTime - lastShotTime >= SHOT_INTERVAL) {
             int index = random.nextInt(enemyPilotList.size());
             EnemyPilot pilot = enemyPilotList.get(index);
-            pilot.shipControl(ActionPilot.FIRE, DirectionObjectMovment.DOWN);
+            pilot.getShip().setAmmoType(new NormalAmmo());
+            pilot.shipControl(ActionPilot.FIRE);
             lastShotTime = currentTime;
         }
     }

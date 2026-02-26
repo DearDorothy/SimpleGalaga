@@ -49,7 +49,8 @@ public class EnemyFormation {
                     direction == 1 ? DirectionObjectMovment.RIGHT : DirectionObjectMovment.LEFT;
 
             for (EnemyPilot enemyPilot: enemyPilotList) {
-                enemyPilot.shipControl(ActionPilot.MOVE, directionMovment);
+                enemyPilot.getShip().setDirectionObjectMovment(directionMovment);
+                enemyPilot.shipControl(ActionPilot.MOVE);
             }
         }
     }

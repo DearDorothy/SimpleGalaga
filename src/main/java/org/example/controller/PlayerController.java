@@ -2,15 +2,14 @@ package org.example.controller;
 
 import org.example.model.ActionPilot;
 import org.example.model.DirectionObjectMovment;
-import org.example.model.field.Field;
+import org.example.model.field.bullet.ammo.NormalAmmo;
 import org.example.model.field.Ship;
+import org.example.model.field.bullet.ammo.RicochetAmmo;
 import org.example.model.manager.Player;
 import org.example.utils.Delays;
 
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.EventListener;
 import javax.swing.Timer;
 
 public class PlayerController extends KeyAdapter {
@@ -20,6 +19,8 @@ public class PlayerController extends KeyAdapter {
     private boolean leftButtonPressed = false;
     private boolean rightButtonPressed = false;
     private boolean spaceButtonPressed = false;
+    private boolean zButtonPressed = false;
+    private boolean xButtonPressed = false;
     private boolean canFire = true;
 
     private Timer moveTimer;
@@ -63,17 +64,25 @@ public class PlayerController extends KeyAdapter {
         if (leftButtonPressed && activeShip.getPoint().getX() > 0) {
             int lim = activeShip.getPoint().getX();
             activeShip.setSpeed(correctSpeed(lim));
-            player.shipControl(ActionPilot.MOVE, DirectionObjectMovment.LEFT);
+            activeShip.setDirectionObjectMovment(DirectionObjectMovment.LEFT);
+            player.shipControl(ActionPilot.MOVE);
         }
         if (rightButtonPressed && activeShip.getPoint().getX() < (fieldWidth - sizeShipWidget)) {
             int lim = Math.abs(activeShip.getPoint().getX() - (fieldWidth - sizeShipWidget));
             activeShip.setSpeed(correctSpeed(lim));
-            player.shipControl(ActionPilot.MOVE, DirectionObjectMovment.RIGHT);
+            activeShip.setDirectionObjectMovment(DirectionObjectMovment.RIGHT);
+            player.shipControl(ActionPilot.MOVE);
         }
         if (spaceButtonPressed && canFire) {
-            player.shipControl(ActionPilot.FIRE, DirectionObjectMovment.UP);
+            player.shipControl(ActionPilot.FIRE);
             canFire = false;
             fireTimer.start();
+        }
+        if (xButtonPressed) {
+            player.getActiveShip().setAmmoType(new NormalAmmo());
+        }
+        if (zButtonPressed) {
+            player.getActiveShip().setAmmoType(new RicochetAmmo());
         }
     }
 
@@ -96,6 +105,14 @@ public class PlayerController extends KeyAdapter {
                 spaceButtonPressed = true;
                 break;
             }
+            case KeyEvent.VK_Z -> {
+                zButtonPressed = true;
+                break;
+            }
+            case KeyEvent.VK_X -> {
+                xButtonPressed = true;
+                break;
+            }
         }
     }
 
@@ -112,6 +129,14 @@ public class PlayerController extends KeyAdapter {
             }
             case KeyEvent.VK_SPACE -> {
                 spaceButtonPressed = false;
+                break;
+            }
+            case KeyEvent.VK_Z -> {
+                zButtonPressed = false;
+                break;
+            }
+            case KeyEvent.VK_X -> {
+                xButtonPressed = false;
                 break;
             }
         }

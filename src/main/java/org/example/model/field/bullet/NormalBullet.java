@@ -1,0 +1,29 @@
+package org.example.model.field.bullet;
+
+import org.example.model.DirectionObjectMovment;
+import org.example.model.OwnerObject;
+import org.example.model.field.FieldObject;
+import org.example.model.field.Point;
+
+public class NormalBullet extends Bullet {
+
+    public NormalBullet(Point point, OwnerObject ownerObject, DirectionObjectMovment directionObjectMovment) {
+        super(point, ownerObject, directionObjectMovment);
+    }
+
+    @Override
+    public void collide(FieldObject object) {
+        if (!isAlive) return;
+        if (ownerObject != object.getOwnerObject() && object.isLethal()) {
+            destroy();
+            object.destroy();
+        }
+    }
+
+    @Override
+    public void destroy() {
+        if (isAlive) {
+            setAlive(false);
+        }
+    }
+}

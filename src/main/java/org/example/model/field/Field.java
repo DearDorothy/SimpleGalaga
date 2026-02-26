@@ -2,9 +2,9 @@ package org.example.model.field;
 
 import org.example.adapter.FieldObjectAdapter;
 import org.example.adapter.ShipActionAdapter;
-import org.example.model.DirectionObjectMovment;
 import org.example.model.OwnerObject;
 import org.example.model.event.*;
+import org.example.model.field.bullet.Bullet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,13 +73,7 @@ public class Field {
             if (obj instanceof Bullet) {
                 Bullet bullet = (Bullet) obj;
                 if (!bullet.isAlive()) continue;
-
-                if (bullet.getOwnerObject() == OwnerObject.PLAYER) {
-                    bullet.move(DirectionObjectMovment.UP);
-                } else if (bullet.getOwnerObject() == OwnerObject.ENEMY) {
-                    bullet.move(DirectionObjectMovment.DOWN);
-                }
-
+                bullet.move();
                 int y = bullet.getPoint().getY();
                 if (y < 0 || y > height) {
                     bullet.destroy();
@@ -141,14 +135,13 @@ public class Field {
         public void shipIsFire(ShipActionEvent event) {
             super.shipIsFire(event);
             Ship ship = event.getShip();
+            Bullet bullet = event.getBullet();
             int xForBullet = ship.getPoint().getX() + (SIZE_COLLISION_MODEL_SHIP - SIZE_COLLISION_MODEL_BULLET)/2;
-            int yForBullet = ship.getPoint().getY();
+            int yForBullet = ship.getPoint().getY() - SIZE_COLLISION_MODEL_BULLET;
             Point pointForBullet = new Point(xForBullet, yForBullet);
-
-            Bullet bullet = new Bullet(pointForBullet, ship.getOwnerObject());
+            bullet.setPoint(pointForBullet);
             bullet.addFieldObjectListener(new FieldOblectMoveObsrerver());
             bullet.setSizeCollisionModel(SIZE_COLLISION_MODEL_BULLET);
-
             System.out.println("Выстрелил дошло до поля");
             addObject(bullet);
         }

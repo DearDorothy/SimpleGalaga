@@ -3,16 +3,22 @@ package org.example.model.field;
 import org.example.model.DirectionObjectMovment;
 import org.example.model.OwnerObject;
 import org.example.model.event.*;
+import org.example.model.field.bullet.ammo.AmmoType;
+import org.example.model.field.bullet.Bullet;
+import org.example.model.field.bullet.ammo.NormalAmmo;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Ship extends FieldObject{
 
+    private AmmoType ammoType;
+
     public Ship(Point point, OwnerObject ownerObject) {
         super(point, ownerObject);
         setSpeed(3);
         setLethal(true);
+        setAmmoType(new NormalAmmo());
     }
 
     public void setPosition(Point point) {
@@ -20,8 +26,12 @@ public class Ship extends FieldObject{
         fireShipIsMoved();
     }
 
+    public void setAmmoType(AmmoType ammoType) {
+        this.ammoType = ammoType;
+    }
+
     @Override
-    public void move(DirectionObjectMovment directionObjectMovment) {
+    public void move() {
         Point oldPoint = point;
         switch(directionObjectMovment) {
             case LEFT -> {
@@ -60,9 +70,15 @@ public class Ship extends FieldObject{
         }
     }
 
-    public void fire(DirectionObjectMovment directionObjectMovment) {
+    public void fire() {
+        if (ammoType == null) return;
+
+        DirectionObjectMovment directionBullet = ownerObject == OwnerObject.PLAYER ? DirectionObjectMovment.UP :
+                DirectionObjectMovment.DOWN;
+        Bullet bullet = ammoType.createBullet(new Point(0, 0), ownerObject, directionBullet);
+
         System.out.println("Корабль выстрелил");
-        fireShipIsFired(directionObjectMovment);
+        fireShipIsFired(bullet);
     }
 
     private List<FieldObjectListener> fieldObjectListeners = new ArrayList<>();
@@ -93,11 +109,11 @@ public class Ship extends FieldObject{
         shipActionListeners.remove(listener);
     }
 
-    private void fireShipIsFired(DirectionObjectMovment directionObjectMovment) {
+    private void fireShipIsFired(Bullet bullet) {
         for(ShipActionListener listener: shipActionListeners) {
             ShipActionEvent event = new ShipActionEvent(this);
             event.setShip(this);
-            event.setDirectionObjectMovment(directionObjectMovment);
+            event.setBullet(bullet);
             listener.shipIsFire(event);
         }
     }

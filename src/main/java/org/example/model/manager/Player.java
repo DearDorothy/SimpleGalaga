@@ -74,10 +74,10 @@ public class Player {
         }
     }
 
-    public void shipControl(ActionPilot actionPilot, DirectionObjectMovment directionObjectMovment) {
+    public void shipControl(ActionPilot actionPilot) {
         switch (actionPilot) {
-            case MOVE -> activeShip.move(directionObjectMovment);
-            case FIRE -> activeShip.fire(directionObjectMovment);
+            case MOVE -> activeShip.move();
+            case FIRE -> activeShip.fire();
         }
     }
 

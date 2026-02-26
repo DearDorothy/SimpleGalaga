@@ -25,10 +25,10 @@ public class EnemyPilot {
         return ship;
     }
 
-    public void shipControl(ActionPilot actionPilot, DirectionObjectMovment directionObjectMovment) {
+    public void shipControl(ActionPilot actionPilot) {
         switch (actionPilot) {
-            case MOVE -> ship.move(directionObjectMovment);
-            case FIRE -> ship.fire(directionObjectMovment);
+            case MOVE -> ship.move();
+            case FIRE -> ship.fire();
         }
     }
 

@@ -8,6 +8,7 @@ public abstract class FieldObject {
     protected Point point;
     protected int speed;
     protected OwnerObject ownerObject;
+    protected DirectionObjectMovment directionObjectMovment;
     protected int sizeCollisionModel;
     protected boolean isLethal = false;
     protected boolean isAlive = true;
@@ -37,6 +38,10 @@ public abstract class FieldObject {
         this.isAlive = isAlive;
     }
 
+    public void setDirectionObjectMovment(DirectionObjectMovment directionObjectMovment) {
+        this.directionObjectMovment = directionObjectMovment;
+    }
+
     public Point getPoint() {
         return point;
     }
@@ -53,6 +58,10 @@ public abstract class FieldObject {
         return speed;
     }
 
+    public DirectionObjectMovment getDirectionObjectMovment() {
+        return directionObjectMovment;
+    }
+
     public boolean isLethal() {
         return isLethal;
     }
@@ -61,7 +70,7 @@ public abstract class FieldObject {
         return isAlive;
     }
 
-    abstract public void move(DirectionObjectMovment directionObjectMovment);
+    abstract public void move();
 
     abstract public void collide(FieldObject object);
 

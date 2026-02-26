@@ -1,7 +1,7 @@
 package org.example.view;
 
 import org.example.model.event.*;
-import org.example.model.field.Bullet;
+import org.example.model.field.bullet.Bullet;
 import org.example.model.field.Field;
 import org.example.model.field.FieldObject;
 import org.example.model.field.Ship;
