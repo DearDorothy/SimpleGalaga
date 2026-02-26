@@ -33,13 +33,6 @@ public class RicochetBullet extends Bullet {
         }
     }
 
-    @Override
-    public void destroy() {
-        if (isAlive) {
-            setAlive(false);
-        }
-    }
-
     private void ricochet() {
         if (getDirectionObjectMovment() == DirectionObjectMovment.UP) {
             setDirectionObjectMovment(DirectionObjectMovment.DOWN);

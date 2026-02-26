@@ -19,11 +19,4 @@ public class NormalBullet extends Bullet {
             object.destroy();
         }
     }
-
-    @Override
-    public void destroy() {
-        if (isAlive) {
-            setAlive(false);
-        }
-    }
 }

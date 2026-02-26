@@ -29,6 +29,13 @@ public abstract class Bullet extends FieldObject {
         fireBulletIsMoved();
     }
 
+    @Override
+    public void destroy() {
+        if (isAlive) {
+            setAlive(false);
+        }
+    }
+
     private List<FieldObjectListener> fieldObjectListeners = new ArrayList<>();
 
     public void addFieldObjectListener(FieldObjectListener listener) {

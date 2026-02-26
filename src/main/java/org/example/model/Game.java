@@ -27,7 +27,7 @@ public class Game {
     public Game() {
         player = new Player();
         field = new Field();
-
+        addGameActionListener(field.getGameActionObserver());
         EnemyFormation enemyFormation = new EnemyFormation(field.getWidth(), field.get_SIZE_COLLISION_MODEL_SHIP());
         enemyCommander = new EnemyCommander(enemyFormation);
     }

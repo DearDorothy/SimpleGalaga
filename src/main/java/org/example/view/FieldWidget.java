@@ -52,6 +52,7 @@ public class FieldWidget extends JPanel {
         FieldObjectWidget widget = objectWidgetMap.remove(object);
         if (widget != null) {
             remove(widget);
+            repaint();
         }
     }
 

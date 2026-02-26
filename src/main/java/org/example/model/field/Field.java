@@ -2,6 +2,7 @@ package org.example.model.field;
 
 import org.example.adapter.FieldObjectAdapter;
 import org.example.adapter.ShipActionAdapter;
+import org.example.model.GameStatus;
 import org.example.model.OwnerObject;
 import org.example.model.event.*;
 import org.example.model.field.bullet.Bullet;
@@ -94,13 +95,28 @@ public class Field {
             }
         }
 
+        List<FieldObject> dead = getAllDeadObject();
+        removeObjects(dead);
+    }
+
+    private List<FieldObject> getAllLiveObject() {
+        List<FieldObject> liveObjects = new ArrayList<>();
+        for (FieldObject object : objectList) {
+            if (object.isAlive()) {
+                liveObjects.add(object);
+            }
+        }
+        return liveObjects;
+    }
+
+    private List<FieldObject> getAllDeadObject() {
         List<FieldObject> dead = new ArrayList<>();
         for (FieldObject object : objectList) {
             if (!object.isAlive()) {
                 dead.add(object);
             }
         }
-        removeObjects(dead);
+        return dead;
     }
 
     private boolean areColliding(FieldObject object1, FieldObject object2) {
@@ -124,7 +140,8 @@ public class Field {
     }
 
     private void removeObjects(List<FieldObject> objects) {
-        for(FieldObject object: objects) {
+        List<FieldObject> toRemove = new ArrayList<>(objects);
+        for (FieldObject object : toRemove) {
             objectList.remove(object);
             fireRemovedFieldObjectFromField(object);
         }
@@ -183,6 +200,19 @@ public class Field {
     private void fireFieldObjectIsMoved(FieldObjectEvent event) {
         for(FieldObjectListener listener: fieldObjectListeners) {
             listener.fieldObjectIsMoved(event);
+        }
+    }
+
+    public GameActionListener getGameActionObserver() {
+        return new GameActionObserver();
+    }
+
+    private class GameActionObserver implements GameActionListener {
+        @Override
+        public void gameStatusChanged(GameActionEvent event) {
+            if (event.getStatus() != GameStatus.RUNNING) {
+                removeObjects(objectList);
+            }
         }
     }
 }
