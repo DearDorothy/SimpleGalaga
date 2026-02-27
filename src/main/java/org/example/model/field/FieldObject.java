@@ -3,6 +3,11 @@ package org.example.model.field;
 import org.example.model.DirectionObjectMovment;
 import org.example.model.OwnerObject;
 
+
+/**
+ *
+ * Класс Полевого Объекта
+ */
 public abstract class FieldObject {
 
     protected Point point;

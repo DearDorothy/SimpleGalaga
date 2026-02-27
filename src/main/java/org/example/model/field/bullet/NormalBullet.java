@@ -5,6 +5,10 @@ import org.example.model.OwnerObject;
 import org.example.model.field.FieldObject;
 import org.example.model.field.Point;
 
+/**
+ *
+ * Класс Обычной пули
+ */
 public class NormalBullet extends Bullet {
 
     public NormalBullet(Point point, OwnerObject ownerObject, DirectionObjectMovment directionObjectMovment) {

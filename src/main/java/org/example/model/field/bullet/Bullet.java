@@ -10,6 +10,10 @@ import org.example.model.field.Point;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ * Класс Пули
+ */
 public abstract class Bullet extends FieldObject {
 
     public Bullet(Point point, OwnerObject ownerObject, DirectionObjectMovment directionObjectMovment) {

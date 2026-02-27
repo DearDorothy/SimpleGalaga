@@ -9,6 +9,10 @@ import org.example.model.field.Ship;
 
 import java.util.List;
 
+/**
+ *
+ * Класс Игрока
+ */
 public class Player {
 
     private final int NUMBER_SHIP = 3;

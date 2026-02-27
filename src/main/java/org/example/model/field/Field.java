@@ -12,8 +12,9 @@ import java.util.List;
 
 
 /**
-*
-*/
+ *
+ * Класс Поля игрового
+ */
 public class Field {
 
     private final int width = 350;

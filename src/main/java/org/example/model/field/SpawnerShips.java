@@ -6,6 +6,10 @@ import org.example.model.OwnerObject;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ * Класс Спавнера кораблей
+ */
 public class SpawnerShips {
 
     private static final int SHIP_SIZE = 35;

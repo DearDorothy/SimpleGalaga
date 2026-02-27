@@ -10,6 +10,10 @@ import org.example.model.field.bullet.ammo.NormalAmmo;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ * Класс Корабля
+ */
 public class Ship extends FieldObject{
 
     private AmmoType ammoType;

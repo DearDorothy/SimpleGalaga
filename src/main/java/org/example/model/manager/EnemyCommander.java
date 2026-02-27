@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ *
+ * Класс Вражеского командира
+ */
 public class EnemyCommander {
 
     private final int NUMBER_PILOT = 15;

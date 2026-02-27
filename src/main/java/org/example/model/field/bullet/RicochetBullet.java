@@ -6,6 +6,10 @@ import org.example.model.field.FieldObject;
 import org.example.model.field.Point;
 import org.example.model.field.Ship;
 
+/**
+ *
+ * Класс Рикошетной пули
+ */
 public class RicochetBullet extends Bullet {
 
     private int ricochetCount = 0;

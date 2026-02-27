@@ -11,6 +11,10 @@ import org.example.model.field.Ship;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ * Класс Вражеского пилота
+ */
 public class EnemyPilot {
 
     private Ship ship;

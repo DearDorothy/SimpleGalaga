@@ -9,6 +9,10 @@ import org.example.model.field.Ship;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ * Класс Вражеской формации
+ */
 public class EnemyFormation {
 
     private List<EnemyPilot> enemyPilotList;
