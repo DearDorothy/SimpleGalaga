@@ -153,15 +153,19 @@ public class Field {
             super.shipIsFire(event);
             Ship ship = event.getShip();
             Bullet bullet = event.getBullet();
-            int xForBullet = ship.getPoint().getX() + (SIZE_COLLISION_MODEL_SHIP - SIZE_COLLISION_MODEL_BULLET)/2;
-            int yForBullet = ship.getPoint().getY() - SIZE_COLLISION_MODEL_BULLET;
-            Point pointForBullet = new Point(xForBullet, yForBullet);
+            bullet.setSizeCollisionModel(SIZE_COLLISION_MODEL_BULLET);
+            Point pointForBullet = calcStartPositionForBullet(ship, bullet);
             bullet.setPoint(pointForBullet);
             bullet.addFieldObjectListener(new FieldOblectMoveObsrerver());
-            bullet.setSizeCollisionModel(SIZE_COLLISION_MODEL_BULLET);
             System.out.println("Выстрелил дошло до поля");
             addObject(bullet);
         }
+    }
+
+    private Point calcStartPositionForBullet(Ship ship, Bullet bullet) {
+        int xForBullet = ship.getPoint().getX() + (ship.getSizeCollisionModel() - bullet.getSizeCollisionModel())/2;
+        int yForBullet = ship.getPoint().getY() - bullet.getSizeCollisionModel();
+        return new Point(xForBullet, yForBullet);
     }
 
     private class FieldOblectMoveObsrerver extends FieldObjectAdapter {
@@ -185,7 +189,7 @@ public class Field {
         for(FieldObjectListener listener: fieldObjectListeners) {
             FieldObjectEvent event = new FieldObjectEvent(this);
             event.setFieldObject(object);
-            listener.addFieldObjectOnField(event);
+            listener.addedFieldObjectOnField(event);
         }
     }
 
@@ -193,7 +197,7 @@ public class Field {
         for(FieldObjectListener listener: fieldObjectListeners) {
             FieldObjectEvent event = new FieldObjectEvent(this);
             event.setFieldObject(object);
-            listener.removeFieldObjectFromField(event);
+            listener.removedFieldObjectFromField(event);
         }
     }
 

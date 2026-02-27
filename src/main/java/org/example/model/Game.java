@@ -48,7 +48,7 @@ public class Game {
         return gameStatus;
     }
 
-    private void setGameStatus(GameStatus status) {
+    void setGameStatus(GameStatus status) {
         if (gameStatus != status) {
             gameStatus = status;
             fireGameStatusIsChanged(gameStatus);
@@ -123,7 +123,7 @@ public class Game {
         }
     }
 
-    private void transferShipsToCommanders() {
+    void transferShipsToCommanders() {
 
         int numberShipPLayer = player.getNumberShip();
         int numberEnemyPilot = enemyCommander.getNumebrPilot();

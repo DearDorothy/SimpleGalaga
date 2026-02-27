@@ -15,8 +15,8 @@ public class NormalBullet extends Bullet {
     public void collide(FieldObject object) {
         if (!isAlive) return;
         if (ownerObject != object.getOwnerObject() && object.isLethal()) {
-            destroy();
             object.destroy();
+            destroy();
         }
     }
 }

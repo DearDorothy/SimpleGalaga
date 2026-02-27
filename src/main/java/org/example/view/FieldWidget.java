@@ -68,14 +68,14 @@ public class FieldWidget extends JPanel {
 
     private class FieldObjectObserver implements FieldObjectListener {
         @Override
-        public void addFieldObjectOnField(FieldObjectEvent event) {
+        public void addedFieldObjectOnField(FieldObjectEvent event) {
             FieldObject fieldObject = event.getFieldObject();
             addWidget(fieldObject);
             updateWidgetBounds(fieldObject);
         }
 
         @Override
-        public void removeFieldObjectFromField(FieldObjectEvent event) {
+        public void removedFieldObjectFromField(FieldObjectEvent event) {
             FieldObject object = event.getFieldObject();
             removeWidget(object);
         }

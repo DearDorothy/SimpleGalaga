@@ -21,6 +21,10 @@ public class EnemyFormation {
         this.sizeShipModelCollision = sizeShipModelCollision;
     }
 
+    public List<EnemyPilot> getEnemyPilotList() {
+        return enemyPilotList;
+    }
+
     public void setEnemyPilotList(List<EnemyPilot> enemyPilotList) {
         this.enemyPilotList = enemyPilotList;
     }

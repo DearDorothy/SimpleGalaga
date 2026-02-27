@@ -33,25 +33,26 @@ public class Ship extends FieldObject{
     @Override
     public void move() {
         Point oldPoint = point;
+        Point newPoint = null;
         switch(directionObjectMovment) {
             case LEFT -> {
-                point = new Point(oldPoint.getX() - speed, oldPoint.getY());
+                newPoint = new Point(oldPoint.getX() - speed, oldPoint.getY());
                 break;
             }
             case RIGHT -> {
-                point = new Point(oldPoint.getX() + speed, oldPoint.getY());
+                newPoint = new Point(oldPoint.getX() + speed, oldPoint.getY());
                 break;
             }
             case UP -> {
-                point = new Point(oldPoint.getX(), oldPoint.getY() - speed);
+                newPoint = new Point(oldPoint.getX(), oldPoint.getY() - speed);
                 break;
             }
             case DOWN -> {
-                point = new Point(oldPoint.getX(), oldPoint.getY() + speed);
+                newPoint = new Point(oldPoint.getX(), oldPoint.getY() + speed);
                 break;
             }
         }
-        fireShipIsMoved();
+        setPosition(newPoint);
     }
 
     @Override
